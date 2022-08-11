@@ -1,6 +1,6 @@
 #!/bin/bash
     # Sync Jam otomatis berdasarkan bug isp by AlkhaNET
-    curl -i http://api.midtrans.com | grep Date > /root/date
+    curl -i http://whatsapp.com | grep Date > /root/date
     
     day=$(cat /root/date | cut -b 12-13)
     month=$(cat /root/date | cut -b 15-17)
