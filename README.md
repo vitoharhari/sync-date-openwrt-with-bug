@@ -7,6 +7,7 @@ Sync date openwrt with pick date from bug or domain
 - jika menggunakan opok Telkomsel silahkan tambahkan :443 dibelakang bug
 - (contoh :     # Sync Jam otomatis berdasarkan bug isp by AlkhaNET
     curl -i http://api.midtrans.com:443 | grep Date > /root/date )
+- perhatian! Script hanya bisa berjalan jika didepan bug adalah http:// bukan https://
 - pastekan command dibawah untuk menginstall script ini
 
 wget --no-check-certificate "https://raw.githubusercontent.com/vitoharhari/sync-date-openwrt-with-bug/main/jam.sh" -O /usr/bin/jam.sh && chmod +x /usr/bin/jam.sh
