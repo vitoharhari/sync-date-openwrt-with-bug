@@ -2,6 +2,7 @@
 Sync date openwrt with pick date from bug or domain
 
 - script AlkhaNet by Teguh Surya Mungaran
+- modded GMT+7 By Vito H.S
 - ganti http://api.midtrans.com dengan bug anda masing2
 - pastekan command dibawah untuk menginstall script ini
 
