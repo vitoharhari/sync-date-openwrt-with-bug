@@ -11,4 +11,5 @@ wget --no-check-certificate "https://raw.githubusercontent.com/vitoharhari/sync-
 
 /usr/bin/jam.sh
 
+- perhatian! Jika bug/domain diganti dengan IP web ui modem lokal maka jam akan terlalu cepat 7 jam dikarenakan settingan ini mengikuti web domain menggunakan acuan waktu GMT +0
 - terimakasih 
