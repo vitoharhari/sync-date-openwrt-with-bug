@@ -1,20 +1,28 @@
-# sync-date-openwrt-with-bug
-Sync date openwrt with pick date from bug or domain
+## Sync Date OpenWrt with Domain Bug
+Sync date openwrt by picking date from selected domain
 
+Sinkronisasi waktu pada OpenWrt dengan mengambil data dari domain terpilih
+
+### Usage - Pemakaian
+- Paste command dibawah untuk memasang script ``jam.sh``
+
+    ```
+    wget --no-check-certificate "https://raw.githubusercontent.com/vitoharhari/sync-date-openwrt-with-bug/main/jam.sh" -O /usr/bin/jam.sh && chmod +x /usr/bin/jam.sh
+    ```
+- Masukkan command dibawah ke **``LuCI -> System -> Startup -> Local Startup``** atau di **``rc.local``** jika di terminal
+
+    ```
+    /usr/bin/jam.sh api.midtrans.com
+    ```
+- Ganti **``api.midtrans.com``** dengan bug/domain kesayangan anda.
+- Jika menggunakan 0p0k Telkomsel silahkan tambahkan ``:443`` dibelakang bug.
+    
+    Contoh: **``/usr/bin/jam.sh api.midtrans.com:443``**
+    
+- Perhatian! Jika bug/domain diganti dengan IP WebUI modem lokal, maka jam akan terlalu cepat 7 jam. Dikarenakan pengaturan ini mengikuti web/domain menggunakan acuan waktu GMT +0
+- Terimakasih 
+
+### Developer - Pengembang
 - script AlkhaNet by Teguh Surya Mungaran
 - modded GMT+7 By Vito H.S
-- ganti http://api.midtrans.com dengan bug anda masing2
-- jika menggunakan opok Telkomsel silahkan tambahkan :443 dibelakang bug
-- (contoh :     # Sync Jam otomatis berdasarkan bug isp by AlkhaNET
-    curl -i http://api.midtrans.com:443 | grep Date > /root/date )
-- perhatian! Script hanya bisa berjalan jika didepan bug adalah http:// bukan https://
-- pastekan command dibawah untuk menginstall script ini
-
-wget --no-check-certificate "https://raw.githubusercontent.com/vitoharhari/sync-date-openwrt-with-bug/main/jam.sh" -O /usr/bin/jam.sh && chmod +x /usr/bin/jam.sh
-
-- masukkan command dibawah ke Luci, di system>startup>local startup,atau di rc.local jika di terminal
-
-/usr/bin/jam.sh
-
-- perhatian! Jika bug/domain diganti dengan IP web ui modem lokal maka jam akan terlalu cepat 7 jam dikarenakan settingan ini mengikuti web domain menggunakan acuan waktu GMT +0
-- terimakasih 
+- Add more advancement codes
