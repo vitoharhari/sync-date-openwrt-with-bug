@@ -1,7 +1,18 @@
 ## Sync Date OpenWrt with Domain Bug
-Sync date openwrt by picking date from selected domain
-
-Sinkronisasi waktu pada OpenWrt dengan mengambil data dari domain terpilih
+- Sync date openwrt by picking date from selected domain.
+- Sinkronisasi waktu pada OpenWrt dengan mengambil data waktu dari domain terpilih.
+- Support sinkronisasi setelah modem siap atau koneksi internet tersedia.
+- Support autorestart VPN tunnels:
+    - OpenClash
+    - Passwall
+    - ShadowsocksR
+    - ShadowsocksR++
+    - v2ray
+    - v2rayA
+    - xray
+    - Libernet
+    - Xderm Mini
+    - Wegare STL
 
 ### Usage - Pemakaian
 - Paste command dibawah untuk memasang script ``jam.sh``
