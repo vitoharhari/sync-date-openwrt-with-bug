@@ -1,20 +1,10 @@
 #!/bin/bash
 # Sync Jam otomatis berdasarkan bug isp by AlkhaNET
-# simplify usage by helmiau
+# Extended GMT+7 by vitoharhari
+# Simplify usage and improved codes by helmiau
 	
-	dtdir="/root/date"
-	if [[ "$1" =~ "http://" ]]; then
-		curl -i "$1" | grep Date > "$dtdir"
-	elif [[ "$1" =~ "https://" ]]; then
-		cv_type=$(echo "$1" | sed "s|https|http|g")
-		curl -i "$cv_type" | grep Date > "$dtdir"
-	elif [[ "$1" =~ [.] ]]; then
-		curl -i http://"$1" | grep Date > "$dtdir"
-	else
-		echo "jam.sh: Config Error! read https://github.com/vitoharhari/sync-date-openwrt-with-bug/blob/main/README.md for details"
-		logger "jam.sh: Config Error! read https://github.com/vitoharhari/sync-date-openwrt-with-bug/blob/main/README.md for details"
-	fi
-
+dtdir="/root/date"
+function sandal() {
     day=$(cat "$dtdir" | cut -b 12-13)
     month=$(cat "$dtdir" | cut -b 15-17)
     year=$(cat "$dtdir" | cut -b 19-22)
@@ -93,3 +83,19 @@ let a=var1+var2
     esac
 
 date --set $year.$month.$day-$a$time2
+}
+
+if [[ "$1" =~ "http://" ]]; then
+	curl -i "$1" | grep Date > "$dtdir"
+	sandal
+elif [[ "$1" =~ "https://" ]]; then
+	cv_type=$(echo "$1" | sed "s|https|http|g")
+	curl -i "$cv_type" | grep Date > "$dtdir"
+	sandal
+elif [[ "$1" =~ [.] ]]; then
+	curl -i http://"$1" | grep Date > "$dtdir"
+	sandal
+else
+	echo "jam.sh: Missing URL/Bug/Domain!. Read https://github.com/vitoharhari/sync-date-openwrt-with-bug/blob/main/README.md for details"
+	logger "jam.sh: Missing URL/Bug/Domain!. Read https://github.com/vitoharhari/sync-date-openwrt-with-bug/blob/main/README.md for details"
+fi
