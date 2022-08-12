@@ -1,12 +1,25 @@
 #!/bin/bash
-    # Sync Jam otomatis berdasarkan bug isp by AlkhaNET
-    curl -i http://api.midtrans.com | grep Date > /root/date
-    
-    day=$(cat /root/date | cut -b 12-13)
-    month=$(cat /root/date | cut -b 15-17)
-    year=$(cat /root/date | cut -b 19-22)
-    time1=$(cat /root/date | cut -b 24-25)
-    time2=$(cat /root/date | cut -b 26-31)
+# Sync Jam otomatis berdasarkan bug isp by AlkhaNET
+# simplify usage by helmiau
+	
+	dtdir="/root/date"
+	if [[ "$1" =~ "http://" ]]; then
+		curl -i "$1" | grep Date > "$dtdir"
+	elif [[ "$1" =~ "https://" ]]; then
+		cv_type=$(echo "$1" | sed "s|https|http|g")
+		curl -i "$cv_type" | grep Date > "$dtdir"
+	elif [[ "$1" =~ [.] ]]; then
+		curl -i http://"$1" | grep Date > "$dtdir"
+	else
+		echo "jam.sh: Config Error! read https://github.com/vitoharhari/sync-date-openwrt-with-bug/blob/main/README.md for details"
+		logger "jam.sh: Config Error! read https://github.com/vitoharhari/sync-date-openwrt-with-bug/blob/main/README.md for details"
+	fi
+
+    day=$(cat "$dtdir" | cut -b 12-13)
+    month=$(cat "$dtdir" | cut -b 15-17)
+    year=$(cat "$dtdir" | cut -b 19-22)
+    time1=$(cat "$dtdir" | cut -b 24-25)
+    time2=$(cat "$dtdir" | cut -b 26-31)
     
     case $month in
         "Jan")
