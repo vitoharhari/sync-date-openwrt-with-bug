@@ -33,6 +33,12 @@
 - Perhatian! Jika bug/domain diganti dengan IP WebUI modem lokal, maka jam akan terlalu cepat 7 jam. Dikarenakan pengaturan ini mengikuti web/domain menggunakan acuan waktu GMT +0
 - Terimakasih 
 
+### How This Script Work - Cara Kerja Script Ini
+- Setelah script dimasukkan ke **``Local Startup``** atau di **``rc.local``** dengan menambahkan domain/bug/URL (maupun port)
+- Device OpenWrt restart, lalu script memeriksa koneksi internet terlebih dahulu.
+- Jika internet belum tersedia, script akan melakukan pengulangan pemeriksaan koneksi sampai koneksi terhubung.
+- Setelah koneksi terhubung, script akan melakukan sinkronisasi waktu terlebih dahulu, lalu merestart aplikasi VPN yang digunakan.
+
 ### Developer - Pengembang
 - Base script from AlkhaNet by Teguh Surya Mungaran
 - Added GMT+7 by Vito H.S
