@@ -23,6 +23,6 @@ Sinkronisasi waktu pada OpenWrt dengan mengambil data dari domain terpilih
 - Terimakasih 
 
 ### Developer - Pengembang
-- script AlkhaNet by Teguh Surya Mungaran
-- modded GMT+7 By Vito H.S
-- Add more advancement codes
+- Base script from AlkhaNet by Teguh Surya Mungaran
+- Added GMT+7 by Vito H.S
+- Add more advancement codes by [Helmi Amirudin](https://helmiau.com)
