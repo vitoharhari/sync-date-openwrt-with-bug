@@ -144,7 +144,7 @@ else
 fi
 
 function ngepink() {
-	int_pink="3"
+	interval="3"
 	httping $cv_type -c $interval | grep connected > /root/logp
 	status=$(cat /root/logp | cut -b 1-9)
   
