@@ -117,6 +117,15 @@ let a=var1+var2
         "30")
            a="06"
             ;;
+	"31")
+           a="07"
+            ;;
+	"32")
+           a="08"
+            ;;
+	"33")
+           a="09"
+            ;;
     esac
 
 date --set $year.$month.$day-$a$time2
