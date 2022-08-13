@@ -6,8 +6,6 @@
 	
 dtdir="/root/date"
 initd="/etc/init.d"
-jamsh="/usr/bin/jam.sh"
-jamup="/root/jam_up.sh"
 
 function nyetop() {
 	echo "jam.sh: Stopping VPN tunnels if available."
@@ -117,14 +115,20 @@ let a="$time1""$gmt"
         "30")
            a="06"
             ;;
-		"31")
+        "31")
            a="07"
             ;;
-		"32")
+        "32")
            a="08"
             ;;
-		"33")
+        "33")
            a="09"
+            ;;
+        "34")
+           a="10"
+            ;;
+        "35")
+           a="11"
             ;;
     esac
 
@@ -134,23 +138,28 @@ logger "jam.sh: Set time to $year"."$month"."$day"-"$a""$time2"
 }
 
 if [[ "$1" == "update" ]]; then
+	jamsh="/usr/bin/jam.sh"
+	jamup2="/root/jam2_up.sh"
+	jamup='/root/jamup.sh'
 	echo -e "jam.sh: Updating script..."
-	cat << "EOF" > $jamup
+	echo -e "jam.sh: Downloading script update..."
+	curl -sL raw.githubusercontent.com/vitoharhari/sync-date-openwrt-with-bug/main/jam.sh > $jamup
+	chmod +x $jamup
+	sed -i 's/\r$//' $jamup
+	cat << "EOF" > $jamup2
 #!/bin/bash
 # Updater script sync jam otomatis berdasarkan bug/domain/url isp
-jamsh="/usr/bin/jam.sh"
-jamup="/root/jam_up.sh"
-echo -e "jam.sh: Downloading script update..."
-wget --no-check-certificate "https://raw.githubusercontent.com/vitoharhari/sync-date-openwrt-with-bug/main/jam.sh" -O $jamup
-chmod +x $jamup
-echo -e "jam.sh: Updating script..."
-[[ -e $jamup ]] && rm -f $jamsh && mv $jamup $jamsh
-echo -e "jam.sh: Update done..."
+jamsh='/usr/bin/jam.sh'
+jamup='/root/jamup.sh'
+[[ -e $jamup ]] && [[ -f $jamsh ]] && rm -f $jamsh && mv $jamup $jamsh
+[[ -e $jamup ]] && [[ ! -f $jamsh ]] && mv $jamup $jamsh
+echo -e 'jam.sh: Update done...'
 chmod +x $jamsh
-bash $jamsh
 EOF
-	chmod +x $jamup
-	bash $jamup
+	sed -i 's/\r$//' $jamup2
+	chmod +x $jamup2
+	bash $jamup2
+	[[ -f $jamup2 ]] && rm -f $jamup2 && echo -e "jam.sh: update file cleaned up!" && logger "jam.sh: update file cleaned up!"
 elif [[ "$1" =~ "http://" ]]; then
 	cv_type="$1"
 elif [[ "$1" =~ "https://" ]]; then
@@ -179,7 +188,6 @@ function ngepink() {
 }
 
 if [[ ! -z "$cv_type" ]]; then
-	ngepink
 	nyetop
 	ngepink
 	ngecurl
@@ -203,7 +211,7 @@ if [[ ! -z "$cv_type" ]]; then
 	#Cleaning files
 	[[ -f /root/logp ]] && rm -f /root/logp && echo -e "jam.sh: logp cleaned up!" && logger "jam.sh: logp cleaned up!"
 	[[ -f "$dtdir" ]] && rm -f "$dtdir" && echo -e "jam.sh: tmp dir cleaned up!" && logger "jam.sh: tmp dir cleaned up!"
-	[[ -f $jamup ]] && rm -f $jamup && echo -e "jam.sh: update file cleaned up!" && logger "jam.sh: update file cleaned up!"
+	[[ -f $jamup2 ]] && rm -f $jamup2 && echo -e "jam.sh: update file cleaned up!" && logger "jam.sh: update file cleaned up!"
 else
 	echo -e "Usage: add domain/bug after script!."
 	echo "jam.sh: Missing URL/Bug/Domain!. Read https://github.com/vitoharhari/sync-date-openwrt-with-bug/blob/main/README.md for details."
