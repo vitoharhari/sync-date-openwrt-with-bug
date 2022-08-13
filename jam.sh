@@ -94,7 +94,8 @@ function sandal() {
     esac
 
 if [[ "$time1" == "08" ]] || [[ "$time1" == "09" ]];then
-	let a=$(echo "${time1//0/}")
+	timeif=$(echo "${time1//0/}")
+	let a="$timeif""$gmt"
 else
 	let a="$time1""$gmt"
 fi
@@ -203,7 +204,7 @@ if [[ ! -z "$cv_type" ]]; then
 	else
 		default_gmt="+7" # default GMT+7
 	fi
-	gmt=$(echo -e "$default_gmt" | sed -e 's/+/+0/g' -e 's/-/-0/g') # optional GMT by command: script.sh api.com -7
+	gmt=$(echo -e "$default_gmt" | sed -e 's/+/+/g' -e 's/-/-/g') # optional GMT by command: script.sh api.com -7
 	echo -e "jam.sh: GMT set to GMT$default_gmt"
 	logger "jam.sh: GMT set to GMT$default_gmt"
 	#End Set GMT
