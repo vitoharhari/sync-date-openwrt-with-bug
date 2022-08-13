@@ -30,7 +30,7 @@
     
     Contoh: **``/usr/bin/jam.sh api.midtrans.com:443``**
     
-- Perhatian! Jika bug/domain diganti dengan IP WebUI modem lokal, maka jam akan terlalu cepat 7 jam. Dikarenakan pengaturan ini mengikuti web/domain menggunakan acuan waktu GMT +0
+- Perhatian! Jika **``bug/domain``** diganti dengan **``IP WebUI modem lokal``**, maka jam akan terlalu cepat 7 jam. Dikarenakan pengaturan ini mengikuti **``web/domain``** menggunakan acuan waktu **``GMT +0``**
 - Terimakasih 
 
 ### How This Script Work - Cara Kerja Script Ini
