@@ -15,11 +15,16 @@
     - Xderm Mini
     - Wegare STL
 
-### Usage - Pemakaian
+### Default Usage - Pemakaian Dasar
 - Paste command dibawah untuk memasang script ``jam.sh``
-
+    
+    Menggunakan **`wget`**
     ```
     wget --no-check-certificate "https://raw.githubusercontent.com/vitoharhari/sync-date-openwrt-with-bug/main/jam.sh" -O /usr/bin/jam.sh && chmod +x /usr/bin/jam.sh
+    ```
+    Menggunakan **`curl`**
+    ```
+    curl -sL raw.githubusercontent.com/vitoharhari/sync-date-openwrt-with-bug/main/jam.sh > /usr/bin/jam.sh && chmod +x /usr/bin/jam.sh
     ```
 - Masukkan command dibawah ke **``LuCI -> System -> Startup -> Local Startup``** atau di **``rc.local``** jika di terminal
 
@@ -27,7 +32,7 @@
     /usr/bin/jam.sh www.site.com 
     ```
 
-### Perhatian! Pahami dan baca secara cermat instrukski dibawah ini !!!
+### Advanced Usage - Pemakaian Lanjutan
 
 - Ganti **``www.site.com ``** dengan bug/domain kesayangan anda. Contoh:
 
@@ -54,6 +59,15 @@
 
     ```
     /usr/bin/jam.sh update
+    ```
+    Tanda update berhasil adalah seperti ini:
+    ```
+    jam.sh: Updating script...
+    jam.sh: Downloading script update...
+    jam.sh: Update done...
+    jam.sh: update file cleaned up!
+    Usage: add domain/bug after script!.
+    jam.sh: Missing URL/Bug/Domain!. Read https://github.com/vitoharhari/sync-date-openwrt-with-bug/blob/main/README.md for details.
     ```
 
 - Jika anda menggunakan modem sebagai acuan sinkronisasi waktu, lakukan langkah berikut:
