@@ -6,16 +6,19 @@
 	
 dtdir="/root/date"
 initd="/etc/init.d"
+logp="/root/logp"
+jamup2="/root/jam2_up.sh"
+jamup='/root/jamup.sh'
 
 function nyetop() {
 	echo "jam.sh: Stopping VPN tunnels if available."
 	logger "jam.sh: Stopping VPN tunnels if available."
-	if [[ $(uci -q get openclash.config.enable) == "1" ]]; then $initd/openclash stop && echo "Stopping OpenClash"; fi
-	if [[ $(uci -q get passwall.enabled) == "1" ]]; then $initd/passwall stop && echo "Stopping Passwall"; fi
-	if [[ $(uci -q get shadowsocksr.@global[0].global_server) != "nil" ]]; then $initd/shadowsocksr stop && echo "Stopping SSR++"; fi
-	if [[ $(uci -q get v2ray.enabled.enabled) == "1" ]]; then $initd/v2ray stop && echo "Stopping v2ray"; fi
-	if [[ $(uci -q get v2raya.config.enabled) == "1" ]]; then $initd/v2raya stop && echo "Stopping v2rayA"; fi
-	if [[ $(uci -q get xray.enabled.enabled) == "1"  ]]; then $initd/xray stop && echo "Stopping Xray"; fi
+	if [[ $(uci -q get openclash.config.enable) == "1" ]]; then "$initd"/openclash stop && echo "Stopping OpenClash"; fi
+	if [[ $(uci -q get passwall.enabled) == "1" ]]; then "$initd"/passwall stop && echo "Stopping Passwall"; fi
+	if [[ $(uci -q get shadowsocksr.@global[0].global_server) != "nil" ]]; then "$initd"/shadowsocksr stop && echo "Stopping SSR++"; fi
+	if [[ $(uci -q get v2ray.enabled.enabled) == "1" ]]; then "$initd"/v2ray stop && echo "Stopping v2ray"; fi
+	if [[ $(uci -q get v2raya.config.enabled) == "1" ]]; then "$initd"/v2raya stop && echo "Stopping v2rayA"; fi
+	if [[ $(uci -q get xray.enabled.enabled) == "1"  ]]; then "$initd"/xray stop && echo "Stopping Xray"; fi
 	if grep -q "screen -AmdS libernet" /etc/rc.local; then ./root/libernet/bin/service.sh -ds && echo "Stopping Libernet"; fi
 	if grep -q "/www/xderm/log/st" /etc/rc.local; then ./www/xderm/xderm-mini stop && echo "Stopping Xderm"; fi
 	if grep -q "autorekonek-stl" /etc/crontabs/root; then echo "3" | stl && echo "Stopping Wegare STL"; fi
@@ -24,12 +27,12 @@ function nyetop() {
 function nyetart() {
 	echo "jam.sh: Restarting VPN tunnels if available."
 	logger "jam.sh: Restarting VPN tunnels if available."
-	if [[ $(uci -q get openclash.config.enable) == "1" ]]; then $initd/openclash restart && echo "Restarting OpenClash"; fi
-	if [[ $(uci -q get passwall.enabled) == "1" ]]; then $initd/passwall restart && echo "Restarting Passwall"; fi
-	if [[ $(uci -q get shadowsocksr.@global[0].global_server) != "nil" ]]; then $initd/shadowsocksr restart && echo "Restarting SSR++"; fi
-	if [[ $(uci -q get v2ray.enabled.enabled) == "1" ]]; then $initd/v2ray restart && echo "Restarting v2ray"; fi
-	if [[ $(uci -q get v2raya.config.enabled) == "1" ]]; then $initd/v2raya restart && echo "Restarting v2rayA"; fi
-	if [[ $(uci -q get xray.enabled.enabled) == "1"  ]]; then $initd/xray restart && echo "Restarting Xray"; fi
+	if [[ $(uci -q get openclash.config.enable) == "1" ]]; then "$initd"/openclash restart && echo "Restarting OpenClash"; fi
+	if [[ $(uci -q get passwall.enabled) == "1" ]]; then "$initd"/passwall restart && echo "Restarting Passwall"; fi
+	if [[ $(uci -q get shadowsocksr.@global[0].global_server) != "nil" ]]; then "$initd"/shadowsocksr restart && echo "Restarting SSR++"; fi
+	if [[ $(uci -q get v2ray.enabled.enabled) == "1" ]]; then "$initd"/v2ray restart && echo "Restarting v2ray"; fi
+	if [[ $(uci -q get v2raya.config.enabled) == "1" ]]; then "$initd"/v2raya restart && echo "Restarting v2rayA"; fi
+	if [[ $(uci -q get xray.enabled.enabled) == "1"  ]]; then "$initd"/xray restart && echo "Restarting Xray"; fi
 	if grep -q "screen -AmdS libernet" /etc/rc.local; then ./root/libernet/bin/service.sh -sl && echo "Restarting Libernet"; fi
 	if grep -q "/www/xderm/log/st" /etc/rc.local; then ./www/xderm/xderm-mini start && echo "Restarting Xderm"; fi
 	if grep -q "autorekonek-stl" /etc/crontabs/root; then echo "2" | stl && echo "Restarting Wegare STL"; fi
@@ -90,7 +93,11 @@ function sandal() {
 
     esac
 
-let a="$time1""$gmt"
+if [[ "$time1" == "08" ]] || [[ "$time1" == "09" ]];then
+	let a=$(echo "${time1//0/}")
+else
+	let a="$time1""$gmt"
+fi
 #echo -e "time1 is $time1 and gmt is $gmt then total is $a" #debugging purpose
 
     case $a in
@@ -133,33 +140,30 @@ let a="$time1""$gmt"
     esac
 
 date --set "$year"."$month"."$day"-"$a""$time2"
-echo -e "jam.sh: Set time to $year"."$month"."$day"-"$a""$time2"
-logger "jam.sh: Set time to $year"."$month"."$day"-"$a""$time2"
+echo -e "jam.sh: Set time to $year.$month.$day-$a$time2"
+logger "jam.sh: Set time to $year.$month.$day-$a$time2"
 }
 
 if [[ "$1" == "update" ]]; then
-	jamsh="/usr/bin/jam.sh"
-	jamup2="/root/jam2_up.sh"
-	jamup='/root/jamup.sh'
 	echo -e "jam.sh: Updating script..."
 	echo -e "jam.sh: Downloading script update..."
-	curl -sL raw.githubusercontent.com/vitoharhari/sync-date-openwrt-with-bug/main/jam.sh > $jamup
-	chmod +x $jamup
-	sed -i 's/\r$//' $jamup
-	cat << "EOF" > $jamup2
+	curl -sL raw.githubusercontent.com/vitoharhari/sync-date-openwrt-with-bug/main/jam.sh > "$jamup"
+	chmod +x "$jamup"
+	sed -i 's/\r$//' "$jamup"
+	cat << "EOF" > "$jamup2"
 #!/bin/bash
 # Updater script sync jam otomatis berdasarkan bug/domain/url isp
 jamsh='/usr/bin/jam.sh'
 jamup='/root/jamup.sh'
-[[ -e $jamup ]] && [[ -f $jamsh ]] && rm -f $jamsh && mv $jamup $jamsh
-[[ -e $jamup ]] && [[ ! -f $jamsh ]] && mv $jamup $jamsh
+[[ -e "$jamup" ]] && [[ -f "$jamsh" ]] && rm -f "$jamsh" && mv "$jamup" "$jamsh"
+[[ -e "$jamup" ]] && [[ ! -f "$jamsh" ]] && mv "$jamup" "$jamsh"
 echo -e 'jam.sh: Update done...'
-chmod +x $jamsh
+chmod +x "$jamsh"
 EOF
-	sed -i 's/\r$//' $jamup2
-	chmod +x $jamup2
-	bash $jamup2
-	[[ -f $jamup2 ]] && rm -f $jamup2 && echo -e "jam.sh: update file cleaned up!" && logger "jam.sh: update file cleaned up!"
+	sed -i 's/\r$//' "$jamup2"
+	chmod +x "$jamup2"
+	bash "$jamup2"
+	[[ -f "$jamup2" ]] && rm -f "$jamup2" && echo -e "jam.sh: update file cleaned up!" && logger "jam.sh: update file cleaned up!"
 elif [[ "$1" =~ "http://" ]]; then
 	cv_type="$1"
 elif [[ "$1" =~ "https://" ]]; then
@@ -174,8 +178,8 @@ fi
 
 function ngepink() {
 	interval="3"
-	httping $cv_type -c $interval | grep connected > /root/logp
-	status=$(cat /root/logp | cut -b 1-9)
+	httping "$cv_type" -c "$interval" | grep connected > "$logp"
+	status=$(cat "$logp" | cut -b 1-9)
   
 	if [[ "$status" =~ "connected" ]]; then
 		echo "jam.sh: Connection available, resuming task..."
@@ -199,7 +203,7 @@ if [[ ! -z "$cv_type" ]]; then
 	else
 		default_gmt="+7" # default GMT+7
 	fi
-	gmt=$(echo "$default_gmt" | sed -e 's|+|+0|g' -e 's|-|-0|g') # optional GMT by command: script.sh api.com -7
+	gmt=$(echo -e "$default_gmt" | sed -e 's/+/+0/g' -e 's/-/-0/g') # optional GMT by command: script.sh api.com -7
 	echo -e "jam.sh: GMT set to GMT$default_gmt"
 	logger "jam.sh: GMT set to GMT$default_gmt"
 	#End Set GMT
@@ -209,9 +213,9 @@ if [[ ! -z "$cv_type" ]]; then
 	nyetart
 
 	#Cleaning files
-	[[ -f /root/logp ]] && rm -f /root/logp && echo -e "jam.sh: logp cleaned up!" && logger "jam.sh: logp cleaned up!"
+	[[ -f "$logp" ]] && rm -f "$logp" && echo -e "jam.sh: logp cleaned up!" && logger "jam.sh: logp cleaned up!"
 	[[ -f "$dtdir" ]] && rm -f "$dtdir" && echo -e "jam.sh: tmp dir cleaned up!" && logger "jam.sh: tmp dir cleaned up!"
-	[[ -f $jamup2 ]] && rm -f $jamup2 && echo -e "jam.sh: update file cleaned up!" && logger "jam.sh: update file cleaned up!"
+	[[ -f "$jamup2" ]] && rm -f "$jamup2" && echo -e "jam.sh: update file cleaned up!" && logger "jam.sh: update file cleaned up!"
 else
 	echo -e "Usage: add domain/bug after script!."
 	echo "jam.sh: Missing URL/Bug/Domain!. Read https://github.com/vitoharhari/sync-date-openwrt-with-bug/blob/main/README.md for details."
