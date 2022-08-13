@@ -35,7 +35,10 @@
 - Script ini menggunakan default GMT+7. jika di lokasi anda berada berbeda, maka silahkan tambahkan ```+9``` (setelah penulisan domain/bug) sesuaikan dengan zona waktu masing-masing. 
     
     Contoh: ```/usr/bin/jam.sh bug.com +9```  atau ```/usr/bin/jam.sh bug.com -7```    
-
+- jika anda ingin menggunakan modem sebagai acuan utama untuk sinkronisasi openwrt,maka hal yang harus diperhatikan adalah :
+    1. Isikan IP web UI Modem anda dengan menyertakan +0
+    Contoh : **``/usr/bin/jam.sh 192.168.1.1 +0``**
+     (Penjelasan : karena kebanyakan waktu yang tertera di web UI MODEM lokal default nya sudah GMT+7 ,maka kita harus memberi settingan +0 dibelakang bug agar waktu +7 tidak ditambahkan lagi kedalam settingan waktu openwrt kita)
 - Terimakasih 
 
 ### How This Script Work - Cara Kerja Script Ini
