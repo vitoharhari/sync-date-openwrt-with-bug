@@ -6,6 +6,8 @@
 	
 dtdir="/root/date"
 initd="/etc/init.d"
+jamsh="/usr/bin/jam.sh"
+jamup="/root/jam_up.sh"
 
 function nyetop() {
 	echo "jam.sh: Stopping VPN tunnels if available."
@@ -36,7 +38,7 @@ function nyetart() {
 }
 
 function ngecurl() {
-	curl -i "$cv_type" | grep Date > "$dtdir"
+	curl -si "$cv_type" | grep Date > "$dtdir"
 	echo "jam.sh: Executed $cv_type as time server."
 	logger "jam.sh: Executed $cv_type as time server."
 }
@@ -89,11 +91,9 @@ function sandal() {
            continue
 
     esac
-    
-var1=$time1
-var2=07
 
-let a=var1+var2
+let a="$time1""$gmt"
+#echo -e "time1 is $time1 and gmt is $gmt then total is $a" #debugging purpose
 
     case $a in
         "24")
@@ -117,24 +117,44 @@ let a=var1+var2
         "30")
            a="06"
             ;;
-	"31")
+		"31")
            a="07"
             ;;
-	"32")
+		"32")
            a="08"
             ;;
-	"33")
+		"33")
            a="09"
             ;;
     esac
 
-date --set $year.$month.$day-$a$time2
+date --set "$year"."$month"."$day"-"$a""$time2"
+echo -e "jam.sh: Set time to $year"."$month"."$day"-"$a""$time2"
+logger "jam.sh: Set time to $year"."$month"."$day"-"$a""$time2"
 }
 
-if [[ "$1" =~ "http://" ]]; then
+if [[ "$1" == "update" ]]; then
+	echo -e "jam.sh: Updating script..."
+	cat << "EOF" > $jamup
+#!/bin/bash
+# Updater script sync jam otomatis berdasarkan bug/domain/url isp
+jamsh="/usr/bin/jam.sh"
+jamup="/root/jam_up.sh"
+echo -e "jam.sh: Downloading script update..."
+wget --no-check-certificate "https://raw.githubusercontent.com/vitoharhari/sync-date-openwrt-with-bug/main/jam.sh" -O $jamup
+chmod +x $jamup
+echo -e "jam.sh: Updating script..."
+[[ -e $jamup ]] && rm -f $jamsh && mv $jamup $jamsh
+echo -e "jam.sh: Update done..."
+chmod +x $jamsh
+bash $jamsh
+EOF
+	chmod +x $jamup
+	bash $jamup
+elif [[ "$1" =~ "http://" ]]; then
 	cv_type="$1"
 elif [[ "$1" =~ "https://" ]]; then
-	cv_type=$(echo "$1" | sed "s|https|http|g")
+	cv_type=$(echo -e "$1" | sed 's|https|http|g')
 elif [[ "$1" =~ [.] ]]; then
 	cv_type=http://"$1"
 else
@@ -163,10 +183,27 @@ if [[ ! -z "$cv_type" ]]; then
 	nyetop
 	ngepink
 	ngecurl
+
+	########
+	#Start Set GMT
+	if [[ "$2" =~ ^[+-][0-9]+$ ]];then
+		default_gmt="$2" # custom GMT
+	else
+		default_gmt="+7" # default GMT+7
+	fi
+	gmt=$(echo "$default_gmt" | sed -e 's|+|+0|g' -e 's|-|-0|g') # optional GMT by command: script.sh api.com -7
+	echo -e "jam.sh: GMT set to GMT$default_gmt"
+	logger "jam.sh: GMT set to GMT$default_gmt"
+	#End Set GMT
+	########
+	
 	sandal
 	nyetart
-	[[ -f /root/logp ]] && rm -f /root/logp
-	[[ -f "$dtdir" ]] && rm -f "$dtdir"
+
+	#Cleaning files
+	[[ -f /root/logp ]] && rm -f /root/logp && echo -e "jam.sh: logp cleaned up!" && logger "jam.sh: logp cleaned up!"
+	[[ -f "$dtdir" ]] && rm -f "$dtdir" && echo -e "jam.sh: tmp dir cleaned up!" && logger "jam.sh: tmp dir cleaned up!"
+	[[ -f $jamup ]] && rm -f $jamup && echo -e "jam.sh: update file cleaned up!" && logger "jam.sh: update file cleaned up!"
 else
 	echo -e "Usage: add domain/bug after script!."
 	echo "jam.sh: Missing URL/Bug/Domain!. Read https://github.com/vitoharhari/sync-date-openwrt-with-bug/blob/main/README.md for details."
