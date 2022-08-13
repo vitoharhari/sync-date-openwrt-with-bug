@@ -23,15 +23,19 @@
 - Masukkan command dibawah ke **``LuCI -> System -> Startup -> Local Startup``** atau di **``rc.local``** jika di terminal
 
     ```
-    /usr/bin/jam.sh api.midtrans.com
+    /usr/bin/jam.sh api.midtrans.com 
     ```
+- Perhatian! Pahami dan baca secara cermat instrukski dibawah ini !!!
+
 - Ganti **``api.midtrans.com``** dengan bug/domain kesayangan anda.
 - Jika menggunakan 0p0k Telkomsel silahkan tambahkan ``:443`` dibelakang bug.
     
     Contoh: **``/usr/bin/jam.sh api.midtrans.com:443``**
+
+- Script ini menggunakan default GMT+7. jika di lokasi anda berada berbeda, maka silahkan tambahkan ```+9``` (setelah penulisan domain/bug) sesuaikan dengan zona waktu masing-masing. 
     
-- Perhatian! Jika **``bug/domain``** diganti dengan **``IP WebUI modem lokal``**, maka jam akan terlalu cepat 7 jam. Dikarenakan pengaturan ini mengikuti **``web/domain``** menggunakan acuan waktu **``GMT +0``**
-- jika lokasi anda bukan **``GMT +7``** maka silahkan edit file **``jam.sh``** nya dengan mengganti di bagian **``var2=ganti disini``** contoh : **``var2=08``**
+    Contoh: ```/usr/bin/jam.sh bug.com +9```  atau ```/usr/bin/jam.sh bug.com -7```    
+
 - Terimakasih 
 
 ### How This Script Work - Cara Kerja Script Ini
