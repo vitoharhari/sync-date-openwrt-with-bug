@@ -71,7 +71,7 @@
 - Device OpenWrt restart, lalu script **``memeriksa koneksi internet``** terlebih dahulu.
 - Jika internet belum tersedia, script akan **``mengulangi pemeriksaan koneksi sampai koneksi terhubung``**.
 - Ketika koneksi sudah terhubung, script akan **``melakukan pemeriksaan paket opkg curl``**.
-- Setelah paket **``curl``** terpasang, script beru akan **``melakukan sinkronisasi waktu``**.
+- Setelah paket **``curl``** terpasang, script baru akan **``melakukan sinkronisasi waktu``**.
 - Jika ada **``aplikasi VPN/Tunneling yang berjalan``**, script akan **``merestart aplikasi VPN yang digunakan``** sebelum melakukan sinkronisasi waktu.
 
 ### Developer - Pengembang
