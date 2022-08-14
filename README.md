@@ -70,8 +70,8 @@
 - Setelah script dimasukkan ke **``Local Startup``** atau di **``rc.local``** dengan menambahkan domain/bug/URL (maupun port)
 - Device OpenWrt restart, lalu script **``memeriksa koneksi internet``** terlebih dahulu.
 - Jika internet belum tersedia, script akan **``mengulangi pemeriksaan koneksi sampai koneksi terhubung``**.
-- Ketika koneksi sudah terhubung, script akan **``melakukan pemeriksaan paket opkg httping``**.
-- Setelah paket **``httping``** terpasang, script beru akan **``melakukan sinkronisasi waktu``**.
+- Ketika koneksi sudah terhubung, script akan **``melakukan pemeriksaan paket opkg curl``**.
+- Setelah paket **``curl``** terpasang, script beru akan **``melakukan sinkronisasi waktu``**.
 - Jika ada **``aplikasi VPN/Tunneling yang berjalan``**, script akan **``merestart aplikasi VPN yang digunakan``** sebelum melakukan sinkronisasi waktu.
 
 ### Developer - Pengembang
