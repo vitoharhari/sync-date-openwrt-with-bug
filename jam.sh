@@ -17,17 +17,17 @@ function ngopkg() {
 	hpg="httping"
 	crl="curl"
 	unav="unavailable, installing..."
-	if curl --head "$testnet" 2>&1 | grep -q 'HTTP/2 301'; then
-		echo -e "${nmfl}: Internet connected..."
+	if [[ $(curl -LI "$testnet" -o /dev/null -w '%{http_code}\n' -s) == "200" ]]; then
+		echo -e "${nmfl}: Internet connected and opkg server is available..."
 		echo -e "${nmfl}: Checking required packages..."
 		logger "${nmfl}: Checking required packages..."
-		if [[ $(opkg list-installed | grep -c "^${hpg}") == "0" ]]; then echo -e "${nmfl}: Pkg httping ${unav}" && opkg update && opkg install $hpg; fi
-		if [[ $(opkg list-installed | grep -c "^${crl}") == "0" ]]; then echo -e "${nmfl}: Pkg curl ${unav}" && opkg update && opkg install $crl; fi
+		if [[ $(opkg list-installed | grep -c "^${hpg}") == "0" ]]; then echo -e "${nmfl}: Pkg $hpg ${unav}" && opkg update && opkg install $hpg; fi
+		if [[ $(opkg list-installed | grep -c "^${crl}") == "0" ]]; then echo -e "${nmfl}: Pkg $crl ${unav}" && opkg update && opkg install $crl; fi
 	else
 		echo "${nmfl}: No internet connection or repository url unavailable..."
 		echo "${nmfl}: Leaving in 3 seconds."
 		sleep 3
-		"$nmfl"
+		"$nmfl" "$cv_type" "$gmt"
 	fi
 }
 
