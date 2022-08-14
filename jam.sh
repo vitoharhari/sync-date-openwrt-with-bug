@@ -10,27 +10,7 @@ logp="/root/logp"
 jamup2="/root/jam2_up.sh"
 jamup="/root/jamup.sh"
 nmfl="$(basename "$0")"
-scver="3.1"
-
-function ngopkg() {
-	testnet=$(grep "_packages" /etc/opkg/distfeeds.conf | sed 's|src/gz openwrt_packages ||g')
-	upinst="opkg update && opkg install"
-	hpg="httping"
-	crl="curl"
-	unav="unavailable, installing..."
-	if [[ $(curl -LI "$testnet" -o /dev/null -w '%{http_code}\n' -s) == "200" ]]; then
-		echo -e "${nmfl}: Internet connected and opkg server is available..."
-		echo -e "${nmfl}: Checking required packages..."
-		logger "${nmfl}: Checking required packages..."
-		if [[ $(opkg list-installed | grep -c "^${hpg}") == "0" ]]; then echo -e "${nmfl}: Pkg $hpg ${unav}" && opkg update && opkg install $hpg; fi
-		if [[ $(opkg list-installed | grep -c "^${crl}") == "0" ]]; then echo -e "${nmfl}: Pkg $crl ${unav}" && opkg update && opkg install $crl; fi
-	else
-		echo "${nmfl}: No internet connection or repository url unavailable..."
-		echo "${nmfl}: Leaving in 3 seconds."
-		sleep 3
-		"$nmfl" "$cv_type"
-	fi
-}
+scver="3.2"
 
 function nyetop() {
 	stopvpn="${nmfl}: Stopping"
@@ -155,16 +135,13 @@ else
 fi
 
 function ngepink() {
-	interval="3"
-	httping "$cv_type" -c "$interval" | grep connected > "$logp"
-	status=$(cat "$logp" | cut -b 1-9)
-  
-	if [[ "$status" =~ "connected" ]]; then
-		echo -e "${nmfl}: Connection available, resuming task..."
-		logger "${nmfl}: Connection available, resuming task..."
+	if [[ $(curl -si ${cv_type} | grep -c 'Date:') == "1" ]]; then
+		echo -e "${nmfl}: Connection to ${cv_type} is available, resuming task..."
+		logger "${nmfl}: Connection to ${cv_type} is available, resuming task..."
 	else 
-		echo -e "${nmfl}: Connection unavailable, pinging again..."
-		logger "${nmfl}: Connection unavailable, pinging again..."
+		echo -e "${nmfl}: Connection to ${cv_type} is unavailable, pinging again..."
+		logger "${nmfl}: Connection to ${cv_type} is unavailable, pinging again..."
+		sleep 3
 		ngepink
 	fi
 }
@@ -175,7 +152,6 @@ if [[ ! -z "$cv_type" ]]; then
 	logger "${nmfl}: Script v${scver}"
 	
 	# Runner
-	ngopkg
 	nyetop
 	ngepink
 	ngecurl
