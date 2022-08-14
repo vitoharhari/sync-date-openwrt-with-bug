@@ -35,12 +35,12 @@ function nyetop() {
 	stopvpn="${nmfl}: Stopping"
 	echo -e "${stopvpn} VPN tunnels if available."
 	logger "${stopvpn} VPN tunnels if available."
-	if [[ $(uci -q get openclash.config.enable) == "1" ]]; then "$initd"/openclash stop && echo -e "${stopvpn} OpenClash"; fi
-	if [[ $(uci -q get passwall.enabled) == "1" ]]; then "$initd"/passwall stop && echo -e "${stopvpn} Passwall"; fi
-	if [[ $(uci -q get shadowsocksr.@global[0].global_server) != "nil" ]]; then "$initd"/shadowsocksr stop && -e echo "${stopvpn} SSR++"; fi
-	if [[ $(uci -q get v2ray.enabled.enabled) == "1" ]]; then "$initd"/v2ray stop && -e echo "${stopvpn} v2ray"; fi
-	if [[ $(uci -q get v2raya.config.enabled) == "1" ]]; then "$initd"/v2raya stop && -e echo "${stopvpn} v2rayA"; fi
-	if [[ $(uci -q get xray.enabled.enabled) == "1"  ]]; then "$initd"/xray stop && -e echo "${stopvpn} Xray"; fi
+	if [[ -f "$initd"/openclash ]] && [[ $(uci -q get openclash.config.enable) == "1" ]]; then "$initd"/openclash stop && echo -e "${stopvpn} OpenClash"; fi
+	if [[ -f "$initd"/passwall ]] && [[ $(uci -q get passwall.enabled) == "1" ]]; then "$initd"/passwall stop && echo -e "${stopvpn} Passwall"; fi
+	if [[ -f "$initd"/shadowsocksr ]] && [[ $(uci -q get shadowsocksr.@global[0].global_server) != "nil" ]]; then "$initd"/shadowsocksr stop && -e echo "${stopvpn} SSR++"; fi
+	if [[ -f "$initd"/v2ray ]] && [[ $(uci -q get v2ray.enabled.enabled) == "1" ]]; then "$initd"/v2ray stop && -e echo "${stopvpn} v2ray"; fi
+	if [[ -f "$initd"/v2raya ]] && [[ $(uci -q get v2raya.config.enabled) == "1" ]]; then "$initd"/v2raya stop && -e echo "${stopvpn} v2rayA"; fi
+	if [[ -f "$initd"/xray ]] && [[ $(uci -q get xray.enabled.enabled) == "1"  ]]; then "$initd"/xray stop && -e echo "${stopvpn} Xray"; fi
 	if grep -q "screen -AmdS libernet" /etc/rc.local; then ./root/libernet/bin/service.sh -ds && echo -e "${stopvpn} Libernet"; fi
 	if grep -q "/www/xderm/log/st" /etc/rc.local; then ./www/xderm/xderm-mini stop && echo -e "${stopvpn} Xderm"; fi
 	if grep -q "autorekonek-stl" /etc/crontabs/root; then echo "3" | stl && echo -e "${stopvpn} Wegare STL"; fi
@@ -50,12 +50,12 @@ function nyetart() {
 	startvpn="${nmfl}: Restarting"
 	echo -e "${startvpn} VPN tunnels if available."
 	logger "${startvpn} VPN tunnels if available."
-	if [[ $(uci -q get openclash.config.enable) == "1" ]]; then "$initd"/openclash restart && echo -e "${startvpn} OpenClash"; fi
-	if [[ $(uci -q get passwall.enabled) == "1" ]]; then "$initd"/passwall restart && echo -e "${startvpn} Passwall"; fi
-	if [[ $(uci -q get shadowsocksr.@global[0].global_server) != "nil" ]]; then "$initd"/shadowsocksr restart && echo -e "${startvpn} SSR++"; fi
-	if [[ $(uci -q get v2ray.enabled.enabled) == "1" ]]; then "$initd"/v2ray restart && echo -e "${startvpn} v2ray"; fi
-	if [[ $(uci -q get v2raya.config.enabled) == "1" ]]; then "$initd"/v2raya restart && echo -e "${startvpn} v2rayA"; fi
-	if [[ $(uci -q get xray.enabled.enabled) == "1"  ]]; then "$initd"/xray restart && echo -e "${startvpn} Xray"; fi
+	if [[ -f "$initd"/openclash ]] && [[ $(uci -q get openclash.config.enable) == "1" ]]; then "$initd"/openclash restart && echo -e "${startvpn} OpenClash"; fi
+	if [[ -f "$initd"/passwall ]] && [[ $(uci -q get passwall.enabled) == "1" ]]; then "$initd"/passwall restart && echo -e "${startvpn} Passwall"; fi
+	if [[ -f "$initd"/shadowsocksr ]] && [[ $(uci -q get shadowsocksr.@global[0].global_server) != "nil" ]]; then "$initd"/shadowsocksr restart && echo -e "${startvpn} SSR++"; fi
+	if [[ -f "$initd"/v2ray ]] && [[ $(uci -q get v2ray.enabled.enabled) == "1" ]]; then "$initd"/v2ray restart && echo -e "${startvpn} v2ray"; fi
+	if [[ -f "$initd"/v2raya ]] && [[ $(uci -q get v2raya.config.enabled) == "1" ]]; then "$initd"/v2raya restart && echo -e "${startvpn} v2rayA"; fi
+	if [[ -f "$initd"/xray ]] && [[ $(uci -q get xray.enabled.enabled) == "1"  ]]; then "$initd"/xray restart && echo -e "${startvpn} Xray"; fi
 	if grep -q "screen -AmdS libernet" /etc/rc.local; then ./root/libernet/bin/service.sh -sl && echo -e "${startvpn} Libernet"; fi
 	if grep -q "/www/xderm/log/st" /etc/rc.local; then ./www/xderm/xderm-mini start && echo -e "${startvpn} Xderm"; fi
 	if grep -q "autorekonek-stl" /etc/crontabs/root; then echo "2" | stl && echo -e "${startvpn} Wegare STL"; fi
@@ -121,7 +121,7 @@ function sandal() {
 	else
 		let jam="$jjamm1""$gmt"
 	fi
-#echo -e "jam1 is $jam1 and gmt is $gmt then total is $jam" #debugging purpose
+	#echo -e "jam1 is $jam1 and gmt is $gmt then total is $jam" #debugging purpose
 
     case $jam in
         "24")
@@ -245,3 +245,8 @@ else
 	echo -e "${nmfl}: Missing URL/Bug/Domain!. Read https://github.com/vitoharhari/sync-date-openwrt-with-bug/blob/main/README.md for details."
 	logger "${nmfl}: Missing URL/Bug/Domain!. Read https://github.com/vitoharhari/sync-date-openwrt-with-bug/blob/main/README.md for details."
 fi
+
+# Sync Jam otomatis berdasarkan bug isp by AlkhaNET
+# Extended GMT+7 by vitoharhari
+# Simplify usage and improved codes by helmiau
+# Supported VPN Tunnels: OpenClash, Passwall, ShadowsocksR, ShadowsocksR++, v2ray, v2rayA, xray, Libernet, Xderm Mini, Wegare
