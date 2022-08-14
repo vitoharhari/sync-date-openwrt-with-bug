@@ -117,8 +117,8 @@ function sandal() {
     esac
 
 	date -u -s "$tahun"."$bulan"."$hari"-"$jam""$menit" > /dev/null 2>&1
-	echo -e "${nmfl}: Set time to $tahun.$bulan.$hari-$jam$menit"
-	logger "${nmfl}: Set time to $tahun.$bulan.$hari-$jam$menit"
+	echo -e "${nmfl}: Set time to [ $(date) ]"
+	logger "${nmfl}: Set time to [ $(date) ]"
 }
 
 if [[ "$1" == "update" ]]; then
