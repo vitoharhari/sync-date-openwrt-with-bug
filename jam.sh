@@ -119,7 +119,7 @@ function sandal() {
 	if [[ "$jam1" == "08" ]] || [[ "$jam1" == "09" ]];then
 		let jam=$(echo "${jam1//0/}")"$gmt"
 	else
-		let jam="$jjamm1""$gmt"
+		let jam="$jam1""$gmt"
 	fi
 	#echo -e "jam1 is $jam1 and gmt is $gmt then total is $jam" #debugging purpose
 
