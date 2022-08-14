@@ -16,6 +16,12 @@
     - Wegare STL
 
 ### Default Usage - Pemakaian Dasar
+- Install paket yang dibutuhkan terlebih dahulu dengan membuka terminal/putty/dsb:
+
+    ```
+    opkg update && opkg install curl httping
+    ```
+
 - Paste command dibawah untuk memasang script ``jam.sh``
     
     Menggunakan **`wget`**
@@ -82,9 +88,11 @@
 - Setelah script dimasukkan ke **``Local Startup``** atau di **``rc.local``** dengan menambahkan domain/bug/URL (maupun port)
 - Device OpenWrt restart, lalu script memeriksa koneksi internet terlebih dahulu.
 - Jika internet belum tersedia, script akan melakukan pengulangan pemeriksaan koneksi sampai koneksi terhubung.
-- Setelah koneksi terhubung, script akan melakukan sinkronisasi waktu terlebih dahulu, lalu merestart aplikasi VPN yang digunakan.
+- Ketika koneksi sudah terhubung, script akan melakukan pemeriksaan paket opkg ``httping``.
+- Setelah paket ``httping`` terpasang, script akan melakukan sinkronisasi waktu.
+- Jika ada aplikasi VPN/Tunneling yang berjalan, script akan merestart aplikasi VPN yang digunakan. Baru setelah itu melakukan sinkronisasi waktu.
 
 ### Developer - Pengembang
 - Base script from AlkhaNet by Teguh Surya Mungaran
 - Added GMT+7 by Vito H.S
-- Add more advancement codes by [Helmi Amirudin](https://helmiau.com)
+- Add (opkg checker and installer, internet checker, vpn manager, gmt selection) codes by [Helmi Amirudin](https://helmiau.com)
