@@ -93,6 +93,6 @@
 - Jika ada aplikasi VPN/Tunneling yang berjalan, script akan merestart aplikasi VPN yang digunakan. Baru setelah itu melakukan sinkronisasi waktu.
 
 ### Developer - Pengembang
-- Base script from AlkhaNet by Teguh Surya Mungaran
-- Added GMT+7 by Vito H.S
+- Base script and more enhancement codes from AlkhaNet by Teguh Surya Mungaran
+- Added GMT+7 and more enhancement codes by Vito H.S
 - Add (opkg checker and installer, internet checker, vpn manager, gmt selection) codes by [Helmi Amirudin](https://helmiau.com)
