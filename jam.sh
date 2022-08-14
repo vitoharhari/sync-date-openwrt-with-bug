@@ -71,7 +71,7 @@ function sandal() {
     hari=$(cat "$dtdir" | cut -b 12-13)
     bulan=$(cat "$dtdir" | cut -b 15-17)
     tahun=$(cat "$dtdir" | cut -b 19-22)
-    jam1=$(cat "$dtdir" | cut -b 24-25)
+    jam=$(cat "$dtdir" | cut -b 24-25)
     menit=$(cat "$dtdir" | cut -b 26-31)
 
     case $bulan in
@@ -116,53 +116,7 @@ function sandal() {
 
     esac
 
-	if [[ "$jam1" == "08" ]] || [[ "$jam1" == "09" ]];then
-		let jam=$(echo "${jam1//0/}")"$gmt"
-	else
-		let jam="$jam1""$gmt"
-	fi
-	#echo -e "jam1 is $jam1 and gmt is $gmt then total is $jam" #debugging purpose
-
-    case $jam in
-        "24")
-           jam="00"
-            ;;
-        "25")
-           jam="01"
-            ;;
-        "26")
-           jam="02"
-            ;;
-        "27")
-           jam="03"
-            ;;
-        "28")
-           jam="04"
-            ;;
-        "29")
-           jam="05"
-            ;;
-        "30")
-           jam="06"
-            ;;
-        "31")
-           jam="07"
-            ;;
-        "32")
-           jam="08"
-            ;;
-        "33")
-           jam="09"
-            ;;
-        "34")
-           jam="10"
-            ;;
-        "35")
-           jam="11"
-            ;;
-    esac
-
-	date --set "$tahun"."$bulan"."$hari"-"$jam""$menit" > /dev/null 2>&1
+	date -u -s "$tahun"."$bulan"."$hari"-"$jam""$menit" > /dev/null 2>&1
 	echo -e "${nmfl}: Set time to $tahun.$bulan.$hari-$jam$menit"
 	logger "${nmfl}: Set time to $tahun.$bulan.$hari-$jam$menit"
 }
@@ -219,20 +173,6 @@ if [[ ! -z "$cv_type" ]]; then
 	nyetop
 	ngepink
 	ngecurl
-
-	########
-	#Start Set GMT
-	if [[ "$2" =~ ^[+-][0-9]+$ ]];then
-		gmt="$2" # custom GMT
-	else
-		gmt="+7" # default GMT+7
-	fi
-	# gmt=$(echo -e "$default_gmt" | sed -e 's/+/+/g' -e 's/-/-/g') # optional GMT by command: script.sh api.com -7
-	echo -e "${nmfl}: GMT set to GMT$gmt"
-	logger "${nmfl}: GMT set to GMT$gmt"
-	#End Set GMT
-	########
-	
 	sandal
 	nyetart
 
