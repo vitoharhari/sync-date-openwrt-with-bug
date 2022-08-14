@@ -10,6 +10,7 @@ logp="/root/logp"
 jamup2="/root/jam2_up.sh"
 jamup="/root/jamup.sh"
 nmfl="$(basename "$0")"
+scver="3.1"
 
 function ngopkg() {
 	testnet=$(grep "_packages" /etc/opkg/distfeeds.conf | sed 's|src/gz openwrt_packages ||g')
@@ -27,7 +28,7 @@ function ngopkg() {
 		echo "${nmfl}: No internet connection or repository url unavailable..."
 		echo "${nmfl}: Leaving in 3 seconds."
 		sleep 3
-		"$nmfl" "$cv_type" "$gmt"
+		"$nmfl" "$cv_type"
 	fi
 }
 
@@ -169,6 +170,11 @@ function ngepink() {
 }
 
 if [[ ! -z "$cv_type" ]]; then
+	# Script Version
+	echo -e "${nmfl}: Script v${scver}"
+	logger "${nmfl}: Script v${scver}"
+	
+	# Runner
 	ngopkg
 	nyetop
 	ngepink
@@ -176,7 +182,7 @@ if [[ ! -z "$cv_type" ]]; then
 	sandal
 	nyetart
 
-	#Cleaning files
+	# Cleaning files
 	[[ -f "$logp" ]] && rm -f "$logp" && echo -e "${nmfl}: logp cleaned up!" && logger "${nmfl}: logp cleaned up!"
 	[[ -f "$dtdir" ]] && rm -f "$dtdir" && echo -e "${nmfl}: tmp dir cleaned up!" && logger "${nmfl}: tmp dir cleaned up!"
 	[[ -f "$jamup2" ]] && rm -f "$jamup2" && echo -e "${nmfl}: update file cleaned up!" && logger "${nmfl}: update file cleaned up!"
