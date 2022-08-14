@@ -75,6 +75,6 @@
 - Jika ada **``aplikasi VPN/Tunneling yang berjalan``**, script akan **``merestart aplikasi VPN yang digunakan``** sebelum melakukan sinkronisasi waktu.
 
 ### Developer - Pengembang
-- Base script and more enhancement codes from AlkhaNet by Teguh Surya Mungaran
-- GMT codes and more enhancement codes by Vito H.S
+- Base script and more enhancement codes from AlkhaNet by [Teguh Surya Mungaran](https://github.com/alkhanet26)
+- GMT codes and more enhancement codes by [Vito H.S](https://github.com/vitoharhari)
 - opkg checker and installer, internet checker, vpn manager, gmt selection codes by [Helmi Amirudin](https://helmiau.com)
