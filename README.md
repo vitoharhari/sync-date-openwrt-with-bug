@@ -19,7 +19,7 @@
 - Install **``paket yang dibutuhkan``** terlebih dahulu dengan membuka terminal/putty/dsb:
 
     ```
-    opkg update && opkg install curl httping
+    opkg update && opkg install curl
     ```
 
 - Paste command dibawah untuk memasang script ``jam.sh``
