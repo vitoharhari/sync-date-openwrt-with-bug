@@ -27,7 +27,6 @@ function ngopkg() {
 		echo "${nmfl}: No internet connection or repository url unavailable..."
 		echo "${nmfl}: Leaving in 3 seconds."
 		sleep 3
-		clear
 		"$nmfl"
 	fi
 }
