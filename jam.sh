@@ -43,7 +43,7 @@ function nyetart() {
 	if grep -q "autorekonek-stl" /etc/crontabs/root; then echo "2" | stl && echo -e "${startvpn} Wegare STL"; fi
 	echo -e "${startvpn} Zerotier in 5 secs if available..."
 	logger "${startvpn} Zerotier in 5 secs if available..."
-	sleep 10
+	sleep 5
 	if [[ -f "$initd"/zerotier ]] && [[ $(uci -q get zerotier.sample_config.enabled) == "1" ]]; then "$initd"/zerotier restart && -e echo "${startvpn} Zerotier DONE!"; fi
 }
 
