@@ -10,7 +10,7 @@ logp="/root/logp"
 jamup2="/root/jam2_up.sh"
 jamup="/root/jamup.sh"
 nmfl="$(basename "$0")"
-scver="3.2"
+scver="3.3"
 
 function nyetop() {
 	stopvpn="${nmfl}: Stopping"
@@ -25,6 +25,7 @@ function nyetop() {
 	if grep -q "screen -AmdS libernet" /etc/rc.local; then ./root/libernet/bin/service.sh -ds && echo -e "${stopvpn} Libernet"; fi
 	if grep -q "/www/xderm/log/st" /etc/rc.local; then ./www/xderm/xderm-mini stop && echo -e "${stopvpn} Xderm"; fi
 	if grep -q "autorekonek-stl" /etc/crontabs/root; then echo "3" | stl && echo -e "${stopvpn} Wegare STL"; fi
+	if [[ -f "$initd"/zerotier ]] && [[ $(uci -q get zerotier.sample_config.enabled) == "1" ]]; then "$initd"/zerotier stop && -e echo "${stopvpn} Zerotier"; fi
 }
 
 function nyetart() {
@@ -40,6 +41,10 @@ function nyetart() {
 	if grep -q "screen -AmdS libernet" /etc/rc.local; then ./root/libernet/bin/service.sh -sl && echo -e "${startvpn} Libernet"; fi
 	if grep -q "/www/xderm/log/st" /etc/rc.local; then ./www/xderm/xderm-mini start && echo -e "${startvpn} Xderm"; fi
 	if grep -q "autorekonek-stl" /etc/crontabs/root; then echo "2" | stl && echo -e "${startvpn} Wegare STL"; fi
+	echo -e "${startvpn} Zerotier in 5 secs if available..."
+	logger "${startvpn} Zerotier in 5 secs if available..."
+	sleep 5
+	if [[ -f "$initd"/zerotier ]] && [[ $(uci -q get zerotier.sample_config.enabled) == "1" ]]; then "$initd"/zerotier restart && -e echo "${startvpn} Zerotier DONE!"; fi
 }
 
 function ngecurl() {
