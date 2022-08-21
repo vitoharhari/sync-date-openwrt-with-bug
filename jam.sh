@@ -10,7 +10,7 @@ logp="/root/logp"
 jamup2="/root/jam2_up.sh"
 jamup="/root/jamup.sh"
 nmfl="$(basename "$0")"
-scver="3.3"
+scver="3.4"
 
 function nyetop() {
 	stopvpn="${nmfl}: Stopping"
@@ -18,14 +18,14 @@ function nyetop() {
 	logger "${stopvpn} VPN tunnels if available."
 	if [[ -f "$initd"/openclash ]] && [[ $(uci -q get openclash.config.enable) == "1" ]]; then "$initd"/openclash stop && echo -e "${stopvpn} OpenClash"; fi
 	if [[ -f "$initd"/passwall ]] && [[ $(uci -q get passwall.enabled) == "1" ]]; then "$initd"/passwall stop && echo -e "${stopvpn} Passwall"; fi
-	if [[ -f "$initd"/shadowsocksr ]] && [[ $(uci -q get shadowsocksr.@global[0].global_server) != "nil" ]]; then "$initd"/shadowsocksr stop && -e echo "${stopvpn} SSR++"; fi
-	if [[ -f "$initd"/v2ray ]] && [[ $(uci -q get v2ray.enabled.enabled) == "1" ]]; then "$initd"/v2ray stop && -e echo "${stopvpn} v2ray"; fi
-	if [[ -f "$initd"/v2raya ]] && [[ $(uci -q get v2raya.config.enabled) == "1" ]]; then "$initd"/v2raya stop && -e echo "${stopvpn} v2rayA"; fi
-	if [[ -f "$initd"/xray ]] && [[ $(uci -q get xray.enabled.enabled) == "1"  ]]; then "$initd"/xray stop && -e echo "${stopvpn} Xray"; fi
+	if [[ -f "$initd"/shadowsocksr ]] && [[ $(uci -q get shadowsocksr.@global[0].global_server) != "nil" ]]; then "$initd"/shadowsocksr stop && echo -e "${stopvpn} SSR++"; fi
+	if [[ -f "$initd"/v2ray ]] && [[ $(uci -q get v2ray.enabled.enabled) == "1" ]]; then "$initd"/v2ray stop && echo -e "${stopvpn} v2ray"; fi
+	if [[ -f "$initd"/v2raya ]] && [[ $(uci -q get v2raya.config.enabled) == "1" ]]; then "$initd"/v2raya stop && echo -e "${stopvpn} v2rayA"; fi
+	if [[ -f "$initd"/xray ]] && [[ $(uci -q get xray.enabled.enabled) == "1"  ]]; then "$initd"/xray stop && echo -e "${stopvpn} Xray"; fi
 	if grep -q "screen -AmdS libernet" /etc/rc.local; then ./root/libernet/bin/service.sh -ds && echo -e "${stopvpn} Libernet"; fi
 	if grep -q "/www/xderm/log/st" /etc/rc.local; then ./www/xderm/xderm-mini stop && echo -e "${stopvpn} Xderm"; fi
 	if grep -q "autorekonek-stl" /etc/crontabs/root; then echo "3" | stl && echo -e "${stopvpn} Wegare STL"; fi
-	if [[ -f "$initd"/zerotier ]] && [[ $(uci -q get zerotier.sample_config.enabled) == "1" ]]; then "$initd"/zerotier stop && -e echo "${stopvpn} Zerotier"; fi
+	if [[ -f "$initd"/zerotier ]] && [[ $(uci -q get zerotier.sample_config.enabled) == "1" ]]; then "$initd"/zerotier stop && echo -e "${stopvpn} Zerotier"; fi
 }
 
 function nyetart() {
@@ -41,10 +41,16 @@ function nyetart() {
 	if grep -q "screen -AmdS libernet" /etc/rc.local; then ./root/libernet/bin/service.sh -sl && echo -e "${startvpn} Libernet"; fi
 	if grep -q "/www/xderm/log/st" /etc/rc.local; then ./www/xderm/xderm-mini start && echo -e "${startvpn} Xderm"; fi
 	if grep -q "autorekonek-stl" /etc/crontabs/root; then echo "2" | stl && echo -e "${startvpn} Wegare STL"; fi
-	echo -e "${startvpn} Zerotier in 5 secs if available..."
-	logger "${startvpn} Zerotier in 5 secs if available..."
-	sleep 5
-	if [[ -f "$initd"/zerotier ]] && [[ $(uci -q get zerotier.sample_config.enabled) == "1" ]]; then "$initd"/zerotier restart && -e echo "${startvpn} Zerotier DONE!"; fi
+	if [[ -f "$initd"/zerotier ]] && [[ $(uci -q get zerotier.sample_config.enabled) == "1" ]]; then
+		echo -e "${startvpn} Zerotier in 5 secs..."
+		logger "${startvpn} Zerotier in 5 secs..."
+		sleep 5
+		"$initd"/zerotier restart
+		echo -e "${startvpn} Zerotier DONE!"
+	else
+		echo -e "${startvpn} Zerotier unavailable, because unused..."
+		logger "${startvpn} Zerotier unavailable, because unused..."
+	fi
 }
 
 function ngecurl() {
@@ -98,7 +104,7 @@ function sandal() {
             bulan="12"
             ;;
         *)
-           continue
+           return
 
     esac
 
