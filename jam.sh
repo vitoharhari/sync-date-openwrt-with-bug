@@ -10,7 +10,7 @@ logp="/root/logp"
 jamup2="/root/jam2_up.sh"
 jamup="/root/jamup.sh"
 nmfl="$(basename "$0")"
-scver="3.4"
+scver="3.5"
 
 function nyetop() {
 	stopvpn="${nmfl}: Stopping"
@@ -150,10 +150,17 @@ function ngepink() {
 		echo -e "${nmfl}: Connection to ${cv_type} is available, resuming task..."
 		logger "${nmfl}: Connection to ${cv_type} is available, resuming task..."
 	else 
-		echo -e "${nmfl}: Connection to ${cv_type} is unavailable, pinging again..."
-		logger "${nmfl}: Connection to ${cv_type} is unavailable, pinging again..."
-		sleep 3
-		ngepink
+		if [[ "$2" == "cron" ]]; then
+			echo -e "${nmfl}: cron mode detected and connection to ${cv_type} is unavailable, restarting VPN..."
+			logger "${nmfl}: cron mode detected and connection to ${cv_type} is unavailable, restarting VPN..."
+			nyetop
+			nyetart
+		else
+			echo -e "${nmfl}: Connection to ${cv_type} is unavailable, pinging again..."
+			logger "${nmfl}: Connection to ${cv_type} is unavailable, pinging again..."
+			sleep 3
+			ngepink
+		fi
 	fi
 }
 
@@ -163,11 +170,15 @@ if [[ ! -z "$cv_type" ]]; then
 	logger "${nmfl}: Script v${scver}"
 	
 	# Runner
-	nyetop
-	ngepink
-	ngecurl
-	sandal
-	nyetart
+	if [[ "$2" == "cron" ]]; then
+		ngepink
+	else
+		nyetop
+		ngepink
+		ngecurl
+		sandal
+		nyetart
+	fi
 
 	# Cleaning files
 	[[ -f "$logp" ]] && rm -f "$logp" && echo -e "${nmfl}: logp cleaned up!" && logger "${nmfl}: logp cleaned up!"
