@@ -2,6 +2,7 @@
 - Sync date openwrt by picking date from selected domain.
 - Sinkronisasi waktu pada OpenWrt dengan mengambil data waktu dari domain terpilih.
 - Mendukung sinkronisasi waktu setelah modem/koneksi internet tersedia.
+- Pemeriksa koneksi (jika menggunakan mode **``cron``**, maka script akan memeriksa koneksi, lalu merestart aplikasi VPN jika koneksi internet tidak tersedia)
 - Pengaturan timezone (zona waktu) secara otomatis mengikuti pengaturan **``LuCI - System - System - Timezone``**.
 - Mendukung autorestart VPN tunnels:
     - OpenClash
@@ -19,7 +20,7 @@
 - Install **``paket yang dibutuhkan``** terlebih dahulu dengan membuka terminal/putty/dsb:
 
     ```
-    opkg update && opkg install curl
+    opkg update && opkg install curl wget
     ```
 
 - Paste command dibawah untuk memasang script ``jam.sh``
@@ -38,6 +39,15 @@
     /usr/bin/jam.sh www.site.com 
     ```
 
+- Jika menggunakan crontab ( cek koneksi setiap 1 jam, lalu me-restart vpn jika koneksi tidak tersedia ), salin perintah dibawah ini ke **``LuCI -> System -> Schedule Tasks``** Contoh:
+
+    ```
+    0 * * * * /usr/bin/jam.sh www.site.com cron
+    ```
+
+    - Perintah diatas juga dapat dimasukkan ke file **``/etc/crontabs/root``**
+    - Untuk kustomisasi waktu cron lainnya dapat dilihat di [crontab.guru](https://crontab.guru/#0_*_*_*_*)
+    
 ### Advanced Usage - Pemakaian Lanjutan
 
 - Ganti **``www.site.com ``** dengan **``bug/domain``** kesayangan anda. Contoh:
@@ -45,6 +55,7 @@
     ```
     /usr/bin/jam.sh m.youtu.be
     ```
+
 - Jika menggunakan **``0p0k Telkomsel``** silahkan tambahkan **``:443``** dibelakang bug. Contoh:
 
     ```
