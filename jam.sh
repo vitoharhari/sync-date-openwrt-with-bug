@@ -10,7 +10,7 @@ logp="/root/logp"
 jamup2="/root/jam2_up.sh"
 jamup="/root/jamup.sh"
 nmfl="$(basename "$0")"
-scver="3.4"
+scver="3.5"
 
 function nyetop() {
 	stopvpn="${nmfl}: Stopping"
@@ -29,6 +29,9 @@ function nyetop() {
 }
 
 function nyetart() {
+	if [[ "$2" == "cron" ]]; then
+		nyetop
+	else
 	startvpn="${nmfl}: Restarting"
 	echo -e "${startvpn} VPN tunnels if available."
 	logger "${startvpn} VPN tunnels if available."
@@ -163,8 +166,12 @@ if [[ ! -z "$cv_type" ]]; then
 	logger "${nmfl}: Script v${scver}"
 	
 	# Runner
-	nyetop
-	ngepink
+	if [[ "$2" == "cron" ]]; then
+		ngepink
+	else
+		nyetop
+		ngepink
+	fi
 	ngecurl
 	sandal
 	nyetart
